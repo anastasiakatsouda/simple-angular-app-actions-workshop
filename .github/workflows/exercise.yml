@@ -1,0 +1,39 @@
+name: Exercise Workflow
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  test-job:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Packages
+        run: npm ci
+
+      - name: Install Angular CLI
+        run: | 
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libxss1 libasound2 libatk-bridge2.0-0 libcups2 libxcomposite1 libxrandr2 libgbm1 libgtk-3-0
+
+      - name: Run Tests
+        run: |
+          CHROME_BIN=$(which chromium) ng test --browsers=ChromeHeadless --watch=false
+        env:
+          CHROME_BIN: /usr/bin/chromium-browser
+
+      - name: Build
+        run: ng build 
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: |
+            dist
+            package.json
+
