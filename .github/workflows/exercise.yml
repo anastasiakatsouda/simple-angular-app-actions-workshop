@@ -16,6 +16,9 @@ jobs:
         run: npm ci
 
       - name: Install Angular CLI
+        run: npm install -g @angular/cli
+
+      - name: Install Chrome dependencies
         run: | 
           sudo apt-get update
           sudo apt-get install -y libnss3 libxss1 libasound2 libatk-bridge2.0-0 libcups2 libxcomposite1 libxrandr2 libgbm1 libgtk-3-0
